@@ -1,0 +1,12 @@
+{
+	"servers": {
+		"justrunmy.app": {
+			"type": "http",
+			"url": "https://justrunmy.app/api/mcp",
+			"headers": {
+				"X-User-Identity": "CfDJ8B89LTz2av5FgehSkt9B36DOLVBJaXtCePtc+yvvJRv2RrfHl3lbz2ygPuVh4+d+H2zEQmqdjZLpikyq7AXRQv22xrRNhPTDYGLBL1Akvjo+s+wVTtwJ62NuByrO3JDf+e+PP9S77bgp/XB/lB0rGt9Ts2U1s10Y8chKrvRjPGxV80+PBGWeAf9cAosZs6jKZtHGRLjRkCJ/N2/p+xc76NbWfKGhjoYMWxQx6YIvlqrVMyT+lEtbOJzMMDlxLZRSevVGgxFjJgqW/KFwEi7Gplzl9H0mK6y9t0/Orw44h7ZrajNYizyJcyBIehuOUr/ckX9xh0SGqhnN6hm1Tvf2hhLFXdvgrfaYSu9sGtR4kpfcqFXNRVMfVfxprWRb2wIZvkX4MwI1uX4EIM0R6JBWzywVNdWWFXwiWVVcOJZ5u0ledj//8gPocc8PnRQKV21ZXGNfFS3aaUHY4vCRU9T9F2HGkS8Fr11YcSQ8eeruHBfaRFH5EQI7AN10r3+cF6b6Y4q5RTZo4muB5+C/McuXUyyoAVUuQeQtURcLj4X3K+kWlM+1fyJGlSJYfliYIw2HmcuWMLexO5t6WCFYMA2EyDRfubH+r2aztwRFIo0MfMAHvI/oWtkWuO7ezmSQo7L+wgRc/Hwaobi2XZu/mdsl9QC4cDlYrrc/aVAN0bLR3Z7mlbPgzIxeAvPvmlJqodo0RfOmQ0UeFYJw7XB+79ds/kW20Px8Te4TNe1XY1FSDAFxfnhoV/WRwMtgBLwVMsbNZ0/U6vHg3qIV/D/new6dXjWuD8Rk74G5htrzkD4ddb11T7YnUfeWN/hlBuD3MDBd/q+nFcwyOGppnyPfCsYIgkH9WERDhv+uIK6JI56Yf+/5"
+			}
+		}
+	},
+	"inputs": []
+}

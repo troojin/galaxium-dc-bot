@@ -1,0 +1,14 @@
+{
+  "autoRoles": [
+    "1485391431353765978"
+  ],
+  "unverifiedRoleId": "1485391431353765978",
+  "verifiedRoleId": "1483532383805505650",
+  "allowedRoleIds": [
+    "1485785671065927801"
+  ],
+  "verifyMessageId": "1485807214781530223",
+  "verifyChannelId": "1485392661014646804",
+  "logChannelId": "1483532385696878769",
+  "prefix": "!"
+}

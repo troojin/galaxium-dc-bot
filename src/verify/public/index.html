@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0d14;
+      --card: #12151f;
+      --border: #1e2235;
+      --accent: #5865f2;
+      --accent-glow: rgba(88, 101, 242, 0.35);
+      --green: #57f287;
+      --red: #ff4444;
+      --text: #e8eaf6;
+      --muted: #6b7280;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    canvas#stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background: #4752c4;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    button:active { transform: scale(0.98); }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .result.success {
+      background: rgba(87, 242, 135, 0.1);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+
+    .result.error {
+      background: rgba(255, 68, 68, 0.1);
+      border: 1px solid var(--red);
+      color: var(--red);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="card">
+  <span class="icon">🛡️</span>
+  <h1>Verify Your Account</h1>
+  <p>Click the button below to verify yourself and gain access to the server.</p>
+  <button id="verifyBtn" onclick="verify()">Verify Me</button>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  // Starfield
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = Array.from({ length: 120 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      a: Math.random(),
+      speed: Math.random() * 0.003 + 0.001,
+    }));
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      s.a += s.speed;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${0.3 + Math.sin(s.a) * 0.3})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  drawStars();
+
+  // Verify
+  async function verify() {
+    const btn = document.getElementById('verifyBtn');
+    const result = document.getElementById('result');
+    const token = new URLSearchParams(window.location.search).get('token');
+
+    if (!token) {
+      result.className = 'result error';
+      result.style.display = 'block';
+      result.textContent = '❌ No verification token found in URL.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Verifying...';
+
+    try {
+      const res = await fetch(`/verify?token=${token}`);
+      const data = await res.json();
+
+      result.style.display = 'block';
+      if (data.success) {
+        result.className = 'result success';
+        result.textContent = '✅ ' + data.message;
+        btn.textContent = 'Verified!';
+      } else {
+        result.className = 'result error';
+        result.textContent = '❌ ' + data.message;
+        btn.disabled = false;
+        btn.textContent = 'Try Again';
+      }
+    } catch {
+      result.className = 'result error';
+      result.style.display = 'block';
+      result.textContent = '❌ Could not reach the server.';
+      btn.disabled = false;
+      btn.textContent = 'Try Again';
+    }
+  }
+</script>
+</body>
+</html>
